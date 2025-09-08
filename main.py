@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 st.set_page_config(
@@ -148,3 +147,4 @@ with col_graf5:
 # --- Tabela completa ---
 st.subheader("Todos os dados")
 st.dataframe(df)
+

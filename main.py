@@ -145,20 +145,7 @@ with col_graf5:
         st.warning("Nenhum dado para exibir o gráfico de Linhas sem uso.")
 
 # --- Tabela completa ---
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 st.subheader("Todos os dados")
-gb = GridOptionsBuilder.from_dataframe(df_filtrado)
-gb.configure_pagination(enabled=True)
-gb.configure_default_column(filter=True, sortable=True, resizable=True)
-grid_options = gb.build()
+st.dataframe(df)
 
-AgGrid(
-    df_filtrado,
-    gridOptions=grid_options,
-    update_mode=GridUpdateMode.NO_UPDATE,
-    enable_enterprise_modules=False,
-    theme="streamlit",
-    height=400,
-    fit_columns_on_grid_load=True
-)
 

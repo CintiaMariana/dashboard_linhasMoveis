@@ -144,8 +144,20 @@ with col_graf5:
     else:
         st.warning("Nenhum dado para exibir o gráfico de Linhas sem uso.")
 
+with col_graf6:
+    if not df_filtrado.empty:
+        # Filtrar apenas linhas com status "Sem uso"
+        df_sem_uso = df_filtrado[df_filtrado['AGOSTO'].astype(str).str.lower() == "sem uso"]
+
+        if not df_sem_uso.empty:
+            st.subheader("📋 Linhas com status 'Sem uso'")
+            st.dataframe(df_sem_uso[['OPERADORA', 'FUNCAO', 'GRUPO', 'DADOS', 'AGOSTO']])
+        else:
+            st.info("Nenhuma linha com status 'Sem uso' encontrada.")
+
 # --- Tabela completa ---
 st.subheader("Todos os dados")
 st.dataframe(df)
+
 
 

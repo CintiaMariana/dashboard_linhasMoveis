@@ -11,7 +11,7 @@ st.set_page_config(
 
 # Carregar dados
 df = pd.read_excel("TELEFONIA_MOVEL.xlsx")
-df_rodovia = pd.read_excel("UNIDADES_RODOVIA_SEM_USO.ods", engine="odf")
+df_rodovia = pd.read_excel("UNIDADES_RODOVIA_SEM_USO.xlsx")
 
 # --- Sidebar: Filtros ---
 st.sidebar.header("🔍 Filtros")
@@ -171,3 +171,4 @@ st.markdown("---")
 # --- Tabela completa ---
 st.subheader("Todos os dados")
 st.dataframe(df)
+

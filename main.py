@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.express as px
 
 st.set_page_config(
@@ -10,6 +11,7 @@ st.set_page_config(
 
 # Carregar dados
 df = pd.read_excel("TELEFONIA_MOVEL.xlsx")
+df_rodovia = pd.read_excel("UNIDADES_RODOVIA_SEM_USO.ods", engine="odf")
 
 # --- Sidebar: Filtros ---
 st.sidebar.header("🔍 Filtros")
@@ -39,13 +41,22 @@ df_filtrado = df[
 ]
 
 # --- Título ---
-st.title("📱 Dashboard de Análise das Linhas Móveis")
+st.title("Dashboard de Análise das Linhas Móveis")
 st.markdown("Explore os dados das linhas móveis. Utilize os filtros à esquerda para refinar sua análise.")
 
 # --- Resumo ---
 resumo = df.groupby("OPERADORA")['OPERADORA'].count()
 st.write("Quantidade de linhas por operadoras:")
 st.write(resumo)
+
+st.subheader("Unidades Rodovia com vendas em até 700.000L em Agosto/2025")
+st.dataframe(
+    df_rodovia.style.set_properties(
+        subset=["VENDA/L AGOSTO"],
+        **{"text-align": "center"}
+    ))
+
+st.markdown("Sugestão: Remanejar números de unidades urbanas que estão sem uso para as unidades com grandes vendas e estão sem número")
 
 st.markdown("---")
 st.subheader("Gráficos")
@@ -143,21 +154,20 @@ with col_graf5:
         st.plotly_chart(grafico_sem_uso, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir o gráfico de Linhas sem uso.")
-
+        
 with col_graf6:
     if not df_filtrado.empty:
         # Filtrar apenas linhas com status "Sem uso"
         df_sem_uso = df_filtrado[df_filtrado['AGOSTO'].astype(str).str.lower() == "sem uso"]
 
         if not df_sem_uso.empty:
-            st.subheader("📋 Linhas com status 'Sem uso'")
+            st.subheader("Linhas com status 'Sem uso'")
             st.dataframe(df_sem_uso[['OPERADORA', 'FUNCAO', 'GRUPO', 'DADOS', 'AGOSTO']])
         else:
             st.info("Nenhuma linha com status 'Sem uso' encontrada.")
 
+st.markdown("---")
+
 # --- Tabela completa ---
 st.subheader("Todos os dados")
 st.dataframe(df)
-
-
-

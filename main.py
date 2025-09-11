@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Carregar dados
+# --- Carregar dados ---
 df = pd.read_excel("TELEFONIA_MOVEL.xlsx")
 df_rodovia = pd.read_excel("UNIDADES_RODOVIA_SEM_USO.xlsx")
 
@@ -49,8 +49,27 @@ resumo = df.groupby("OPERADORA")['OPERADORA'].count()
 st.write("Quantidade de linhas por operadoras:")
 st.write(resumo)
 
+# --- Tabela Unidades Rodovia ---
 st.subheader("Unidades Rodovia com vendas em até 700.000L em Agosto/2025")
 st.dataframe(df_rodovia)
+
+# --- Gráfico de pizza por STATUS abaixo da tabela ---
+if 'STATUS' in df_rodovia.columns:
+    resumo_status = df_rodovia['STATUS'].value_counts().reset_index()
+    resumo_status.columns = ['Status', 'Quantidade']
+
+    grafico_status = px.pie(
+        resumo_status,
+        names='Status',
+        values='Quantidade',
+        title='Postos Rodovia com vendas acima de 700.000L',
+        hole=0.4
+    )
+    grafico_status.update_traces(textinfo='percent+label')
+    grafico_status.update_layout(title_x=0.5)
+    st.plotly_chart(grafico_status, use_container_width=True)
+else:
+    st.warning("A coluna 'STATUS' não foi encontrada em df_rodovia.")
 
 st.markdown("Sugestão: Remanejar números de unidades urbanas que estão sem uso para as unidades com grandes vendas e estão sem número")
 
@@ -68,7 +87,7 @@ with col_graf1:
             resumo_operadora,
             names='Operadora',
             values='Quantidade',
-            title='Proporção de Linhas por Operadora',
+            title='Linhas por Operadora',
             hole=0.4
         )
         grafico_operadora.update_traces(textinfo='percent+label')
@@ -85,7 +104,7 @@ with col_graf2:
             resumo_dados,
             names='Dados Móveis',
             values='Quantidade',
-            title='Proporção de Linhas por Tipo de Dados',
+            title='Linhas por Tipo de Dados',
             hole=0.4
         )
         grafico_dados.update_traces(textinfo='percent+label')
@@ -106,7 +125,7 @@ with col_graf3:
             x='Quantidade',
             y='Função',
             orientation='h',
-            title='Quantidade de Linhas por Função',
+            title='Qtd de Linhas por Função',
             labels={'Quantidade': 'Quantidade de Linhas', 'Função': ''}
         )
         grafico_funcao.update_layout(title_x=0.5)
@@ -123,7 +142,7 @@ with col_graf4:
             x='Quantidade',
             y='Grupo',
             orientation='h',
-            title='Quantidade de Linhas por Grupo',
+            title='Qtd de Linhas por Grupo',
             labels={'Quantidade': 'Quantidade de Linhas', 'Grupo': ''}
         )
         grafico_grupo.update_layout(title_x=0.5)
@@ -150,7 +169,7 @@ with col_graf5:
         st.plotly_chart(grafico_sem_uso, use_container_width=True)
     else:
         st.warning("Nenhum dado para exibir o gráfico de Linhas sem uso.")
-        
+
 with col_graf6:
     if not df_filtrado.empty:
         # Filtrar apenas linhas com status "Sem uso"
@@ -163,7 +182,6 @@ with col_graf6:
             st.info("Nenhuma linha com status 'Sem uso' encontrada.")
 
 st.markdown("---")
-
 
 # --- Tabela completa ---
 st.subheader("Todos os dados")

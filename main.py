@@ -50,11 +50,7 @@ st.write("Quantidade de linhas por operadoras:")
 st.write(resumo)
 
 st.subheader("Unidades Rodovia com vendas em até 700.000L em Agosto/2025")
-st.dataframe(
-    df_rodovia.style.set_properties(
-        subset=["VENDA/L AGOSTO"],
-        **{"text-align": "center"}
-    ))
+st.dataframe(df_rodovia)
 
 st.markdown("Sugestão: Remanejar números de unidades urbanas que estão sem uso para as unidades com grandes vendas e estão sem número")
 
@@ -168,7 +164,7 @@ with col_graf6:
 
 st.markdown("---")
 
+
 # --- Tabela completa ---
 st.subheader("Todos os dados")
 st.dataframe(df)
-
